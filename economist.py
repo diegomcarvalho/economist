@@ -14,6 +14,7 @@ from typing import Iterable, Sequence
 import pandas as pd
 from plotnine import (
     aes,
+    coord_flip,
     element_blank,
     element_line,
     element_rect,
@@ -127,6 +128,7 @@ def te_line(
     chart_title: str,
     chart_subtitle: str,
     cap: str,
+    flip: bool = False,
     breaks: Iterable | None = None,
     y_var_names: Sequence[str] | None = None,
     group_col: str = "series",
@@ -156,6 +158,10 @@ def te_line(
         p = p + scale_x_continuous(breaks=list(breaks))
     else:
         p = p + scale_x_discrete()
+
+    if flip:
+        p = p + coord_flip()
+
     return (
         p
         + labs(
@@ -177,6 +183,7 @@ def te_bar(
     chart_title: str,
     chart_subtitle: str,
     cap: str,
+    flip: bool = False,
     y_var_names: Sequence[str] | None = None,
     group_col: str = "series",
     value_col: str = "value",
@@ -195,7 +202,7 @@ def te_bar(
     n_series = df_ts[group_col].nunique()
     values = [ECON_PALETTE[i % len(ECON_PALETTE)] for i in range(0, max(0, n_series))]
 
-    return (
+    ret = (
         ggplot(df_ts, aes(x=x_var_name, y=value_col, fill=group_col))
         + geom_col(position=position_dodge(width=0.8), width=0.7)
         + scale_fill_manual(values=values[:n_series])
@@ -210,6 +217,11 @@ def te_bar(
         + theme_economist()
     )
 
+    if flip:
+        ret = ret + coord_flip()
+
+    return ret
+
 
 def te_boxplot(
     df: pd.DataFrame,
@@ -220,8 +232,9 @@ def te_boxplot(
     chart_title: str,
     chart_subtitle: str,
     cap: str,
+    flip: bool = False,
 ):
-    return (
+    ret = (
         ggplot(df, aes(x=x_var_name, y=y_var_name, fill=x_var_name))
         + geom_boxplot(width=0.65, outlier_alpha=0.5)
         + geom_jitter()
@@ -236,6 +249,11 @@ def te_boxplot(
         )
         + theme_economist()
     )
+
+    if flip:
+        ret = ret + coord_flip()
+
+    return ret
 
 
 __all__ = ["theme_economist", "te_line", "te_bar", "te_boxplot"]
