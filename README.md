@@ -5,7 +5,7 @@ The `economist` package creates publication-ready charts in The Economist style 
 
 Key features include a custom theme with Economist colors (light blue background, white horizontal grids), automatic data reshaping, and color palettes from the publication.[file:1]
 
-## Requirements
+## Requirement
 - Python 3.14+
 - `plotnine`
 - `pandas`
