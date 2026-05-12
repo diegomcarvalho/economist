@@ -30,6 +30,7 @@ from plotnine import (
     scale_color_manual,
     scale_fill_manual,
     scale_x_continuous,
+    scale_y_continuous,
     scale_x_discrete,
     theme,
     theme_bw,
@@ -156,6 +157,7 @@ def te_line(
     )
     if breaks is not None:
         p = p + scale_x_continuous(breaks=list(breaks))
+        p = p + scale_y_continuous(limits=(0,None))
     else:
         p = p + scale_x_discrete()
 
